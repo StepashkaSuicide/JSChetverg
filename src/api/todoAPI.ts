@@ -38,7 +38,7 @@ export type TaskType = {
     addedDate: string;
 }
 export type CommonResponseTaskType<T = {}> = {
-    data: { items: T }
+    data: T
     messages: string[];
     fieldsErrors: string[];
     resultCode: number;
@@ -68,7 +68,7 @@ export const TodoAPI = {
         return instance.get<TaskType[]>(`todo-lists/${todolistId}/tasks`)
     },
     createTask(todolistId: string, title: string) {
-        return instance.post<CommonResponseTaskType<{ item: TaskType }>>(`/todo-lists/${todolistId}/tasks`,
+        return instance.post<CommonResponseTaskType<TaskType>>(`/todo-lists/${todolistId}/tasks`,
             {title})
     },
     updateTask(p: { todolistId: string, taskId: string, title: string }) {

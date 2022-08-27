@@ -5,39 +5,17 @@ import {Dispatch} from 'redux';
 import {AppRootStateType, AppThunkType} from './store';
 
 
-export const removeTaskAC = (taskId: string, todolistId: string) => ({
-    type: 'REMOVE-TASK',
-    taskId: taskId,
-    todolistId: todolistId
-} as const)
+export const removeTaskAC = (taskId: string, todolistId: string) => ({type: 'REMOVE-TASK', taskId, todolistId} as const)
 export const addTaskAC = (task: TaskType) => ({type: 'ADD-TASK', task} as const)
 export const changeTaskStatusAC = (taskId: string, status: TaskStatuses, todolistId: string) => ({
-    type: 'CHANGE-TASK-STATUS',
-    status,
-    todolistId,
-    taskId
+    type: 'CHANGE-TASK-STATUS', status, todolistId, taskId
 } as const)
 export const changeTaskTitleAC = (taskId: string, title: string, todolistId: string) => ({
-    type: 'CHANGE-TASK-TITLE',
-    title,
-    todolistId,
-    taskId
+    type: 'CHANGE-TASK-TITLE', title, todolistId, taskId
 } as const)
 export const setTasksAC = (todolistId: string, tasks: TaskType[]) => ({
-        type: 'SET-TASKS',
-        todolistId,
-        tasks
-    } as const
-)
-export type TaskActionsType =
-    | ReturnType<typeof removeTaskAC>
-    | ReturnType<typeof addTaskAC>
-    | ReturnType<typeof changeTaskStatusAC>
-    | ReturnType<typeof changeTaskTitleAC>
-    | ReturnType<typeof setTasksAC>
-    | ReturnType<typeof addTodolistAC>
-    | ReturnType<typeof removeTodolistAC>
-    | ReturnType<typeof setTodolistAC>
+    type: 'SET-TASKS', todolistId, tasks
+} as const)
 
 const initialState: TasksStateType = {
     /*"todolistId1": [
@@ -72,40 +50,35 @@ export const tasksReducer = (state: TasksStateType = initialState, action: TaskA
         }
 
         case 'ADD-TASK': {
-            let newTask = action.task
-            const stateCopy = {...state}
-            stateCopy[newTask.todoListId] = [newTask, ...stateCopy[newTask.todoListId]]
-            return stateCopy;
+            return {
+                ...state,
+                [action.task.todoListId]: [action.task, ...state[action.task.todoListId]]
+            }
         }
         case 'REMOVE-TASK': {
-            const stateCopy = {...state}
-            const tasks = stateCopy[action.todolistId];
-            const newTasks = tasks.filter(t => t.id !== action.taskId);
-            stateCopy[action.todolistId] = newTasks;
-            return stateCopy;
+            return {
+                ...state,
+                [action.todolistId]: state[action.todolistId].filter(f => f.id !== action.taskId)
+            }
         }
 
         case 'CHANGE-TASK-STATUS': {
-            let todolistTasks = state[action.todolistId];
-            let newTasksArray = todolistTasks
-                .map(t => t.id === action.taskId ? {...t, status: action.status} : t);
-
-            state[action.todolistId] = newTasksArray;
-            return ({...state});
+            return {
+                ...state, [action.todolistId]: state[action.todolistId]
+                    .map(t => t.id === action.taskId ? {...t, status: action.status} : t)
+            }
         }
         case 'CHANGE-TASK-TITLE': {
-            let todolistTasks = state[action.todolistId];
-            // найдём нужную таску:
-            let newTasksArray = todolistTasks
-                .map(t => t.id === action.taskId ? {...t, title: action.title} : t);
-
-            state[action.todolistId] = newTasksArray;
-            return ({...state});
+            return {
+                ...state,
+                [action.todolistId]:state[action.todolistId]
+                    .map(t=>t.id===action.taskId ? {...t, title: action.title}: t)
+            }
         }
         case 'ADD-TODOLIST': {
             return {
                 ...state,
-                [action.todolistId]: []
+                [action.todolist.id]: []
             }
         }
         case 'REMOVE-TODOLIST': {
@@ -175,3 +148,12 @@ export const updateTaskStatusTC = (todolistId: string, taskId: string, status: T
 
 }
 
+export type TaskActionsType =
+    | ReturnType<typeof removeTaskAC>
+    | ReturnType<typeof addTaskAC>
+    | ReturnType<typeof changeTaskStatusAC>
+    | ReturnType<typeof changeTaskTitleAC>
+    | ReturnType<typeof setTasksAC>
+    | ReturnType<typeof addTodolistAC>
+    | ReturnType<typeof removeTodolistAC>
+    | ReturnType<typeof setTodolistAC>

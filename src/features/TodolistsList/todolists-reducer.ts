@@ -1,7 +1,7 @@
 import {v1} from 'uuid';
-import {todolistsAPI, TodolistType} from '../api/todolists-api'
+import {todolistsAPI, TodolistType} from '../../api/todolists-api'
 import {Dispatch} from 'redux';
-import {AppThunkType} from './store';
+import {AppThunkType} from '../../app/store';
 
 
 export const removeTodolistAC = (todolistId: string) => {

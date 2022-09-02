@@ -10,7 +10,7 @@ import {
     TodolistDomainType,
     updateTodolistTitleTC
 } from './todolists-reducer';
-import {addTaskTC, changeTaskTitleAC, deleteTaskTC, updateTaskStatusTC} from './tasks-reducer';
+import {addTaskTC, changeTaskTitleAC, changeTaskTitleTC, deleteTaskTC, updateTaskStatusTC} from './tasks-reducer';
 import {TaskStatuses} from '../../api/todolists-api';
 import Grid from '@mui/material/Grid';
 import {AddItemForm} from '../../components/AddItemForm/AddItemForm';
@@ -39,9 +39,8 @@ export const TodolistList: React.FC = () => {
         dispatch(updateTaskStatusTC(todolistId, id, status));
     }, []);
 
-    const changeTaskTitle = useCallback(function (id: string, newTitle: string, todolistId: string) {
-        const action = changeTaskTitleAC(id, newTitle, todolistId);
-        dispatch(action);
+    const changeTaskTitle = useCallback(function (taskId: string, title: string, todolistId: string) {
+        dispatch(changeTaskTitleTC(taskId, title, todolistId))
     }, [dispatch]);
 
     const changeFilter = useCallback(function (value: FilterValuesType, todolistId: string) {

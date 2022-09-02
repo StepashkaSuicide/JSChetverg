@@ -122,18 +122,21 @@ export const addTaskTC = (todolistId: string, title: string): AppThunkType => (d
         })
 }
 
+export const changeTaskTitleTC = (taskId: string, title: string, todolistId: string ): AppThunkType => (dispatch: Dispatch) => {
+    todolistsAPI.updateTaskTitle(taskId, title, todolistId )
+        .then((res) => {
+            dispatch(changeTaskTitleAC(taskId, title, todolistId))
+        })
+}
+
 
 export const updateTaskStatusTC = (todolistId: string, taskId: string, status: TaskStatuses) => (dispatch: Dispatch, getState: () => AppRootStateType) => {
     const state = getState()
-    const allAppTasks = state.tasks
-    const tasksForCurrentTodo = allAppTasks[todolistId]
-    const changedTask = tasksForCurrentTodo.find(t => {
-        return t.id === taskId
-    })
+    const changedTask=  state.tasks[todolistId].find(t => {
+        return t.id === taskId})
     if (changedTask) {
         const model: UpdateTaskModelType = {
-            title: changedTask.title,
-            status,
+            title: changedTask.title,status,
             deadline: changedTask.deadline,
             description: changedTask.description,
             priority: changedTask.priority,

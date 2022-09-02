@@ -6,6 +6,7 @@ import {AppRootStateType, AppThunkType} from '../../app/store';
 import {setAppErrorAC, setAppStatusAC} from '../../app/appReducer';
 import {useDispatch} from 'react-redux';
 import {AxiosError} from 'axios';
+import {handleAppError, handleNetworkError} from '../../helpers/errorHelpers';
 
 
 export const removeTaskAC = (taskId: string, todolistId: string) => ({type: 'REMOVE-TASK', taskId, todolistId} as const)
@@ -128,17 +129,20 @@ export const addTaskTC = (todolistId: string, title: string): AppThunkType => (d
                 dispatch(addTaskAC(res.data.data.item))
                 dispatch(setAppStatusAC('succeeded'))
             } else {
-                if (res.data.messages.length) {
-                    dispatch(setAppErrorAC(res.data.messages[0]))
-                } else {
-                    dispatch(setAppErrorAC('Some error occurred'))
-                }
-                dispatch(setAppStatusAC('failed'))
+                handleAppError(dispatch, res.data)
             }
+            //     if (res.data.messages.length) {
+            //         dispatch(setAppErrorAC(res.data.messages[0]))
+            //     } else {
+            //         dispatch(setAppErrorAC('Some error occurred'))
+            //     }
+            //     dispatch(setAppStatusAC('failed'))
+            // }
         })
         .catch((err: AxiosError) => {
-            dispatch(setAppErrorAC(err.message))
-            dispatch(setAppStatusAC('failed'))
+            handleNetworkError(dispatch, err.message)
+            // dispatch(setAppErrorAC(err.message))
+            // dispatch(setAppStatusAC('failed'))
         })
 }
 

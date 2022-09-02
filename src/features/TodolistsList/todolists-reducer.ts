@@ -3,6 +3,7 @@ import {Dispatch} from 'redux';
 import {AppThunkType} from '../../app/store';
 import {AppActionsType, RequestStatusType, setAppErrorAC, setAppStatusAC} from '../../app/appReducer';
 import {AxiosError} from 'axios';
+import {handleAppError, handleNetworkError} from '../../helpers/errorHelpers';
 
 
 export const removeTodolistAC = (todolistId: string) => {
@@ -91,17 +92,11 @@ export const createTodolistTC = (title: string) => (dispatch: Dispatch<TodolistA
                 dispatch(addTodolistAC(res.data.data.item))
                 dispatch(setAppStatusAC('succeeded'))
             } else {
-                if (res.data.messages.length) {
-                    dispatch(setAppErrorAC(res.data.messages[0]))
-                } else {
-                    dispatch(setAppErrorAC('Some error occurred'))
-                }
-                dispatch(setAppStatusAC('failed'))
+                handleAppError(dispatch, res.data)
             }
         })
         .catch((err: AxiosError) => {
-            dispatch(setAppErrorAC(err.message))
-            dispatch(setAppStatusAC('failed'))
+            handleNetworkError(dispatch, err.message)
         })
 }
 

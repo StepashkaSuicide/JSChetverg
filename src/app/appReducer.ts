@@ -1,3 +1,5 @@
+import {addTodolistAC} from '../features/TodolistsList/todolists-reducer';
+
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed' | 'Some error occurred'
 
 const initialState = {
@@ -18,22 +20,21 @@ export const appReducer = (state: InitialStateType = initialState, action: AppAc
     }
 }
 
-export const setAppStatusAC = (status: RequestStatusType)=> {
+export const setAppStatusAC = (status: RequestStatusType) => {
     return {
         type: 'APP/SET-STATUS',
         status
-    }as const
+    } as const
 }
 
-export const setAppErrorAC = (error: null | string)=> {
+export const setAppErrorAC = (error: null | string) => {
     return {
-        type:'APP/SET-ERROR',
+        type: 'APP/SET-ERROR',
         error
-    }as const
+    } as const
 }
 
 
-
-
-export type AppActionsType = ReturnType<typeof setAppStatusAC>
+export type AppActionsType =
+    | ReturnType<typeof setAppStatusAC>
     | ReturnType<typeof setAppErrorAC>

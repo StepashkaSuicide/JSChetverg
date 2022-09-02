@@ -9,6 +9,9 @@ import Container from '@mui/material/Container';
 import {Menu} from '@mui/icons-material';
 import {TaskType} from '../api/todolists-api';
 import {TodolistList} from '../features/TodolistsList/TodolistsList';
+import LinearProgress from '@mui/material/LinearProgress';
+import {useAppSelector} from './store';
+import {ErrorSnackbar} from '../components/ErrorSnackbar/ErrorSnackbar';
 
 
 export type TasksStateType = {
@@ -16,8 +19,12 @@ export type TasksStateType = {
 }
 
 function App() {
+
+    const status = useAppSelector(state => state.app.status)
+
     return (
         <div className="App">
+            <ErrorSnackbar/>
             <AppBar position="static">
                 <Toolbar>
                     <IconButton edge="start" color="inherit" aria-label="menu">
@@ -28,6 +35,7 @@ function App() {
                     </Typography>
                     <Button color="inherit">Login</Button>
                 </Toolbar>
+                {status === 'loading' && <LinearProgress/>}
             </AppBar>
             <Container fixed>
                 <TodolistList/>

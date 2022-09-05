@@ -27,7 +27,7 @@ export const setAppStatusAC = (status: RequestStatusType) => {
     } as const
 }
 
-export const setAppErrorAC = (error: null | string) => {
+export const setAppErrorAC = (error: string | null) => {
     return {
         type: 'APP/SET-ERROR',
         error

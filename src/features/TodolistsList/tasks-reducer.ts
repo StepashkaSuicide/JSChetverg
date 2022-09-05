@@ -3,8 +3,7 @@ import {addTodolistAC, removeTodolistAC, setTodolistAC} from './todolists-reduce
 import {TaskStatuses, TaskType, todolistsAPI, UpdateTaskModelType} from '../../api/todolists-api'
 import {Dispatch} from 'redux';
 import {AppRootStateType, AppThunkType} from '../../app/store';
-import {setAppErrorAC, setAppStatusAC} from '../../app/appReducer';
-import {useDispatch} from 'react-redux';
+import {setAppStatusAC} from '../../app/appReducer';
 import {AxiosError} from 'axios';
 import {handleAppError, handleNetworkError} from '../../helpers/errorHelpers';
 
@@ -21,24 +20,7 @@ export const setTasksAC = (todolistId: string, tasks: TaskType[]) => ({
     type: 'SET-TASKS', todolistId, tasks
 } as const)
 
-const initialState: TasksStateType = {
-    /*"todolistId1": [
-        { id: "1", title: "CSS", status: TaskStatuses.New, todoListId: "todolistId1", description: '',
-            startDate: '', deadline: '', addedDate: '', order: 0, priority: TaskPriorities.Low },
-        { id: "2", title: "JS", status: TaskStatuses.Completed, todoListId: "todolistId1", description: '',
-            startDate: '', deadline: '', addedDate: '', order: 0, priority: TaskPriorities.Low },
-        { id: "3", title: "React", status: TaskStatuses.New, todoListId: "todolistId1", description: '',
-            startDate: '', deadline: '', addedDate: '', order: 0, priority: TaskPriorities.Low }
-    ],
-    "todolistId2": [
-        { id: "1", title: "bread", status: TaskStatuses.New, todoListId: "todolistId2", description: '',
-            startDate: '', deadline: '', addedDate: '', order: 0, priority: TaskPriorities.Low },
-        { id: "2", title: "milk", status: TaskStatuses.Completed, todoListId: "todolistId2", description: '',
-            startDate: '', deadline: '', addedDate: '', order: 0, priority: TaskPriorities.Low },
-        { id: "3", title: "tea", status: TaskStatuses.New, todoListId: "todolistId2", description: '',
-            startDate: '', deadline: '', addedDate: '', order: 0, priority: TaskPriorities.Low }
-    ]*/
-}
+const initialState: TasksStateType = {}
 
 export const tasksReducer = (state: TasksStateType = initialState, action: TaskActionsType): TasksStateType => {
 
@@ -66,6 +48,7 @@ export const tasksReducer = (state: TasksStateType = initialState, action: TaskA
                 [action.todolistId]: state[action.todolistId].filter(f => f.id !== action.taskId)
             }
         }
+
 
         case 'CHANGE-TASK-STATUS': {
             return {
@@ -131,18 +114,9 @@ export const addTaskTC = (todolistId: string, title: string): AppThunkType => (d
             } else {
                 handleAppError(dispatch, res.data)
             }
-            //     if (res.data.messages.length) {
-            //         dispatch(setAppErrorAC(res.data.messages[0]))
-            //     } else {
-            //         dispatch(setAppErrorAC('Some error occurred'))
-            //     }
-            //     dispatch(setAppStatusAC('failed'))
-            // }
         })
         .catch((err: AxiosError) => {
             handleNetworkError(dispatch, err.message)
-            // dispatch(setAppErrorAC(err.message))
-            // dispatch(setAppStatusAC('failed'))
         })
 }
 
@@ -172,7 +146,6 @@ export const updateTaskStatusTC = (todolistId: string, taskId: string, status: T
         dispatch(setAppStatusAC('loading'))
         todolistsAPI.updateTask(todolistId, taskId, model)
             .then((res) => {
-                // const action = changeTaskStatusAC(id, status, todolistId);
                 dispatch(changeTaskStatusAC(taskId, status, todolistId))
                 dispatch(setAppStatusAC('succeeded'))
             })

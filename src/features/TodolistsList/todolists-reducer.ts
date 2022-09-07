@@ -25,6 +25,9 @@ export const changeTodolistEntityStatusAC = (todolistId: string, entityStatus: R
     return {type: 'CHANGE-TODOLIST-ENTITY-STATUS', payload: {todolistId, entityStatus}} as const
 }
 
+
+
+
 const initialState: Array<TodolistDomainType> = []
 
 export const todolistsReducer = (state: Array<TodolistDomainType> = initialState,

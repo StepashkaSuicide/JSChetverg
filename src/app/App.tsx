@@ -1,27 +1,27 @@
 import React from 'react'
-import './App.css';
+import './App.css'
+import { TodolistsList } from '../features/TodolistsList/TodolistsList'
+import { useSelector } from 'react-redux'
+import { AppRootStateType } from './store'
+import { RequestStatusType } from './app-reducer'
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
-import {Menu} from '@mui/icons-material';
-import {TaskType} from '../api/todolists-api';
-import {TodolistList} from '../features/TodolistsList/TodolistsList';
 import LinearProgress from '@mui/material/LinearProgress';
-import {useAppSelector} from './store';
-import {ErrorSnackbar} from '../components/ErrorSnackbar/ErrorSnackbar';
+import { Menu } from '@mui/icons-material';
+import { ErrorSnackbar } from '../components/ErrorSnackbar/ErrorSnackbar'
+import { Login } from '../features/Login/Login'
+import {Navigate, Route, Routes} from 'react-router-dom'
 
-
-export type TasksStateType = {
-    [key: string]: Array<TaskType>
+type PropsType = {
+    demo?: boolean
 }
 
-function App() {
-
-    const status = useAppSelector(state => state.app.status)
-
+function App({demo = false}: PropsType) {
+    const status = useSelector<AppRootStateType, RequestStatusType>((state) => state.app.status)
     return (
         <div className="App">
             <ErrorSnackbar/>
@@ -38,11 +38,15 @@ function App() {
                 {status === 'loading' && <LinearProgress/>}
             </AppBar>
             <Container fixed>
-                <TodolistList/>
+                <Routes>
+                    <Route path={'/'} element={<TodolistsList demo={demo}/>}/>
+                    <Route path={'/login'} element={<Login/>}/>
+                    <Route path={'/page_not_found'} element={<h1>404: PAGE NOT FOUND</h1>}/>
+                    <Route path={'*'} element={<Navigate to={'/page_not_found'}/>}/>
+                </Routes>
             </Container>
         </div>
-    );
+    )
 }
 
-
-export default App;
+export default App

@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { AppRootStateType } from '../../app/store'
+import React, {useCallback, useEffect} from 'react'
+import {useDispatch, useSelector} from 'react-redux'
+import {AppRootStateType} from '../../app/store'
 import {
     addTodolistTC,
     changeTodolistFilterAC,
@@ -10,12 +10,13 @@ import {
     removeTodolistTC,
     TodolistDomainType
 } from './todolists-reducer'
-import { addTaskTC, removeTaskTC, TasksStateType, updateTaskTC } from './tasks-reducer'
-import { TaskStatuses } from '../../api/todolists-api'
+import {addTaskTC, removeTaskTC, TasksStateType, updateTaskTC} from './tasks-reducer'
+import {TaskStatuses} from '../../api/todolists-api'
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import { AddItemForm } from '../../components/AddItemForm/AddItemForm'
-import { Todolist } from './Todolist/Todolist'
+import {AddItemForm} from '../../components/AddItemForm/AddItemForm'
+import {Todolist} from './Todolist/Todolist'
+import {Navigate, useNavigate} from 'react-router-dom';
 
 type PropsType = {
     demo?: boolean
@@ -25,14 +26,24 @@ export const TodolistsList: React.FC<PropsType> = ({demo = false}) => {
     const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)
     const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
     const dispatch = useDispatch()
+    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
+    const navigate = useNavigate()
 
+//альтернативный способ редиректа если не залогинен
     useEffect(() => {
-        if (demo) {
-            return;
+        if (isLoggedIn) {
+            dispatch(fetchTodolistsTC())
+        }else {
+            navigate('login')
         }
-        const thunk = fetchTodolistsTC()
-        dispatch(thunk)
-    }, [])
+    }, [isLoggedIn])
+
+
+    // useEffect(() => {
+    //     if (isLoggedIn) {
+    //         dispatch(fetchTodolistsTC())
+    //     }
+    // }, [])
 
     const removeTask = useCallback(function (id: string, todolistId: string) {
         const thunk = removeTaskTC(id, todolistId)
@@ -74,6 +85,10 @@ export const TodolistsList: React.FC<PropsType> = ({demo = false}) => {
         dispatch(thunk)
     }, [dispatch])
 
+//старый способ редиректа на логин
+    // if (!isLoggedIn){
+    //     return <Navigate to={'login'}/>
+    // }
 
     return <>
         <Grid container style={{padding: '20px'}}>

@@ -84,6 +84,8 @@ export const TodolistsList: React.FC<PropsType> = ({demo = false}) => {
         dispatch(thunk)
     }, [dispatch])
 
+
+
 //старый способ редиректа на логин
     // if (!isLoggedIn){
     //     return <Navigate to={'login'}/>

@@ -11,8 +11,10 @@ import {useFormik} from 'formik';
 import {useDispatch, useSelector} from 'react-redux';
 import {loginTC} from './authReducer';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import {AppRootStateType} from '../../app/store';
 import {Navigate} from 'react-router-dom';
+import s from './Login.module.css'
 
 type FormikErrorType = {
     email?: string
@@ -55,8 +57,6 @@ export const Login = () => {
     if (isLoggedIn) {
         return <Navigate to={'/'}/>
     }
-
-
     const togglePassword = () => {
         setPasswordShown(!passwordShown);
     };
@@ -89,7 +89,7 @@ export const Login = () => {
                             {...formik.getFieldProps('email')}
                         />
                         {formik.touched.email && formik.errors.email &&
-                            <div style={{color: 'red',}}>{formik.errors.email}</div>}
+                            <div className={s.touchedEmail}>{formik.errors.email}</div>}
 
                         <TextField
                             label="Password"
@@ -99,30 +99,17 @@ export const Login = () => {
                             {...formik.getFieldProps('password')}
                         />
 
-
-                        <VisibilityIcon fontSize={'large'} style={{
-                            cursor: 'pointer',
-                            position: 'relative',
-                            top: '-52px', left: '250',
-                            color: '#1565c0'
-                        }}
-                                        onClick={togglePassword}>
-
-                        </VisibilityIcon>
+                        {!passwordShown
+                            ? <VisibilityIcon  fontSize={'large'} className={s.visibleEye} onClick={togglePassword}/>
+                            : <VisibilityOffIcon className={s.visibleEye} fontSize={'large'} onClick={togglePassword}/>}
 
                         {formik.touched.password && formik.errors.password &&
-                            <div style={{
-                                color: 'red',
-                                marginTop: '-20px',
-                                paddingBottom: '10px'
-                            }}>{formik.errors.password}</div>}
-
-                        <FormControlLabel style={{marginTop: '-10px'}}
+                            <div className={s.touchedPass}>{formik.errors.password}</div>}
+                        <FormControlLabel className={s.formLabel}
                                           label={'Remember me'}
                                           control={<Checkbox checked={formik.values.rememberMe}/>}
                                           {...formik.getFieldProps('rememberMe')}
                         />
-
                         <Button
                             type={'submit'}
                             variant={'contained'}

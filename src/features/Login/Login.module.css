@@ -1,0 +1,21 @@
+.visibleEye {
+    cursor: pointer;
+    position: relative;
+    top: -52px;
+    left: 250px;
+    color: #1565c0
+}
+
+.touchedPass {
+    color: red;
+    margin-top: -20px;
+    padding-bottom: 10px;
+}
+
+.formLabel {
+    margin-top: -10px
+}
+
+.touchedEmail{
+    color: red;
+}

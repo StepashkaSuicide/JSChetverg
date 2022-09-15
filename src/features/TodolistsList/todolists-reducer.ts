@@ -27,6 +27,9 @@ export const todolistsReducer = (state: Array<TodolistDomainType> = initialState
 
 
 
+
+
+
 // actions
 export const removeTodolistAC = (id: string) => ({type: 'REMOVE-TODOLIST', id} as const)
 export const addTodolistAC = (todolist: TodolistType) => ({type: 'ADD-TODOLIST', todolist} as const)

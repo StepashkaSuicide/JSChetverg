@@ -24,7 +24,7 @@ type FormikErrorType = {
 
 
 export const Login = () => {
-    const [passwordShown, setPasswordShown] = useState(false);
+    const [passwordShow, setPasswordShow] = useState(false);
     const dispatch = useDispatch()
     const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
 
@@ -52,13 +52,17 @@ export const Login = () => {
             dispatch(loginTC(values))
             formik.resetForm()
         },
-    });
+    })
+
+
+
 //редирект с логина
     if (isLoggedIn) {
         return <Navigate to={'/'}/>
     }
+
     const togglePassword = () => {
-        setPasswordShown(!passwordShown);
+        setPasswordShow(!passwordShow);
     };
 
 
@@ -94,17 +98,18 @@ export const Login = () => {
                         <TextField
                             label="Password"
                             margin="normal"
-                            type={passwordShown ? 'text' : 'password'}
+                            type={passwordShow ? 'text' : 'password'}
 
                             {...formik.getFieldProps('password')}
                         />
 
-                        {!passwordShown
+                        {!passwordShow
                             ? <VisibilityIcon  fontSize={'large'} className={s.visibleEye} onClick={togglePassword}/>
                             : <VisibilityOffIcon className={s.visibleEye} fontSize={'large'} onClick={togglePassword}/>}
 
                         {formik.touched.password && formik.errors.password &&
                             <div className={s.touchedPass}>{formik.errors.password}</div>}
+
                         <FormControlLabel className={s.formLabel}
                                           label={'Remember me'}
                                           control={<Checkbox checked={formik.values.rememberMe}/>}
